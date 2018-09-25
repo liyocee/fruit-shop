@@ -14,4 +14,6 @@ public class CustomerDTO {
 
   private String lastname;
 
+  private String customer_url;
+
 }
