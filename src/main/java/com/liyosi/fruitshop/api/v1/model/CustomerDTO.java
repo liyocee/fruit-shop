@@ -1,5 +1,6 @@
 package com.liyosi.fruitshop.api.v1.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -14,6 +15,7 @@ public class CustomerDTO {
 
   private String lastname;
 
-  private String customer_url;
+  @JsonProperty("customer_url")
+  private String customerUrl;
 
 }

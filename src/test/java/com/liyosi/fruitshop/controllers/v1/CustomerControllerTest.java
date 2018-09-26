@@ -23,6 +23,7 @@ import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -94,8 +95,7 @@ public class CustomerControllerTest extends  AbstractRestControllerTest {
 
   @Test
   public void testCreateCustomer() throws Exception {
-
-    // give
+    // given
     CustomerDTO customerDTO = new CustomerDTO();
     customerDTO.setFirstname("Ckl");
     customerDTO.setLastname("Last");
@@ -104,7 +104,7 @@ public class CustomerControllerTest extends  AbstractRestControllerTest {
     savedCustomerDto.setId(1L);
     savedCustomerDto.setLastname(customerDTO.getLastname());
     savedCustomerDto.setFirstname(customerDTO.getFirstname());
-    savedCustomerDto.setCustomer_url("/api/v1/customers/" + savedCustomerDto.getId());
+    savedCustomerDto.setCustomerUrl("/api/v1/customers/" + savedCustomerDto.getId());
 
     when(customerService.createNewCustomer(anyObject())).thenReturn(savedCustomerDto);
 
@@ -114,5 +114,28 @@ public class CustomerControllerTest extends  AbstractRestControllerTest {
       .content(asJsonString(customerDTO)))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.firstname", equalTo(customerDTO.getFirstname())));
+  }
+
+  @Test
+  public void testUpdateCustomer() throws Exception {
+    // given
+    CustomerDTO customerDTO = new CustomerDTO();
+    customerDTO.setFirstname("Ckl");
+    customerDTO.setLastname("Last");
+    customerDTO.setId(1L);
+
+    CustomerDTO updatedCustomerDto = new CustomerDTO();
+    updatedCustomerDto.setId(customerDTO.getId());
+    updatedCustomerDto.setFirstname("updated");
+    updatedCustomerDto.setCustomerUrl("/api/v1/customers/" + customerDTO.getId());
+
+    when(customerService.updateCustomer(anyLong(), anyObject())).thenReturn(updatedCustomerDto);
+
+    // then
+    mockMvc.perform(put("/api/v1/customers/1")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(asJsonString(customerDTO)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.firstname", equalTo("updated")));
   }
 }
