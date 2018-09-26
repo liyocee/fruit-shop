@@ -4,14 +4,12 @@ import com.liyosi.fruitshop.api.v1.model.CustomerDTO;
 import com.liyosi.fruitshop.api.v1.model.CustomerListDTO;
 import com.liyosi.fruitshop.services.CustomerService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by liyosi on Sep, 2018
  */
-@Controller
+@RestController
 @RequestMapping("/api/v1/customers/")
 public class CustomerController {
   private final CustomerService customerService;
@@ -21,27 +19,26 @@ public class CustomerController {
   }
 
   @GetMapping
-  ResponseEntity<CustomerListDTO> getCustomers() {
-   return new ResponseEntity<CustomerListDTO>(new CustomerListDTO(customerService.findCustomers()), HttpStatus.OK);
+  @ResponseStatus(HttpStatus.OK)
+  CustomerListDTO getCustomers() {
+   return new CustomerListDTO(customerService.findCustomers());
   }
 
   @GetMapping("{id}")
-  ResponseEntity<CustomerDTO> getCustomer(@PathVariable String id) {
-    return new ResponseEntity<CustomerDTO>(customerService.findById(Long.valueOf(id)), HttpStatus.OK);
+  @ResponseStatus(HttpStatus.OK)
+  CustomerDTO getCustomer(@PathVariable String id) {
+    return customerService.findById(Long.valueOf(id));
   }
 
   @PostMapping
-  ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerDTO customerDTO) {
-
-    CustomerDTO createdCustomer = customerService.createNewCustomer(customerDTO);
-
-    return new ResponseEntity<CustomerDTO>(createdCustomer, HttpStatus.CREATED);
+  @ResponseStatus(HttpStatus.CREATED)
+  CustomerDTO createCustomer(@RequestBody CustomerDTO customerDTO) {
+    return customerService.createNewCustomer(customerDTO);
   }
 
-
   @PutMapping("{id}")
-  ResponseEntity<CustomerDTO> updateCustomer(@PathVariable("id") String id, @RequestBody CustomerDTO customerDTO) {
-    return new ResponseEntity<CustomerDTO>(customerService.updateCustomer(Long.valueOf(id), customerDTO), HttpStatus.OK);
-
+  @ResponseStatus(HttpStatus.OK)
+  CustomerDTO updateCustomer(@PathVariable("id") String id, @RequestBody CustomerDTO customerDTO) {
+    return customerService.updateCustomer(Long.valueOf(id), customerDTO);
   }
 }
