@@ -6,11 +6,7 @@ import com.liyosi.fruitshop.services.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.xml.ws.Response;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by liyosi on Sep, 2018
@@ -32,5 +28,13 @@ public class CustomerController {
   @GetMapping("{id}")
   ResponseEntity<CustomerDTO> getCustomer(@PathVariable String id) {
     return new ResponseEntity<CustomerDTO>(customerService.findById(Long.valueOf(id)), HttpStatus.OK);
+  }
+
+  @PostMapping
+  ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerDTO customerDTO) {
+
+    CustomerDTO createdCustomer = customerService.createNewCustomer(customerDTO);
+
+    return new ResponseEntity<CustomerDTO>(createdCustomer, HttpStatus.CREATED);
   }
 }

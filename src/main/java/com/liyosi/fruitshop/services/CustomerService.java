@@ -12,4 +12,6 @@ public interface CustomerService {
   public List<CustomerDTO> findCustomers();
 
   public CustomerDTO findById(Long id);
+
+  CustomerDTO createNewCustomer(CustomerDTO customerDTO);
 }
